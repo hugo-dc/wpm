@@ -4,23 +4,91 @@ USAGE="\nUsage: $0 [option] [package]"
 OPTIONS="\tsearch\t[package]\n\tinstall\t<package>"
 BASE=`dirname $0`
 
-
 function wpm_search {
-    local pkg=$(echo $1 | tr '[A-Z]' '[a-z]' )
-    
-    echo "Searching $1... " 
+    pkg=""
+    if  [[ ! -z $1 ]] ; then 
+        local pkg=$(echo $1 | tr '[A-Z]' '[a-z]' )
+    fi
    
-    total=0
+    local total=0
+    match=0
     for pack in $(ls $BASE/packages)
     do 
-        echo pack 
-        $total = $total + 1
+        if [[ "$pack" = *$1* ]] ; then
+            cat installed | grep -Fx "$pack" > tmp
+            fii=$?
+            if [[ "$fii" = "0" ]] ; then 
+                stat="- INSTALLED"
+            else
+                stat="- NOT INSTALLED"
+            fi
+            echo -e "$pack $stat"
+            if [[ "$pack" = $1 ]] ; then 
+                let match=match+1
+            fi
+        fi
+        let total=total+1
     done
-    echo -e "===================\nTotal packages: $total"
+    echo $match
+}
+
+function wpm_print_found {
+    declare -a res=("$1") 
+    echo "$res"
+}
+
+function wpm_found {
+    declare -a res=($1)
+    result=${#res[@]}
+    let result=result-1
+    result=${res[${result}]} # Last element is the number of found packages
+    echo "$result"
 }
 
 function wpm_install {
-    echo "Installing... $1"
+    result=$(wpm_search $1) 
+    result=$(echo $result | tr -d "\n")
+    found=$(wpm_found "$result")
+    if [[ "$found" = "1" ]] ; then 
+        bintype=$($BASE/packages/$1 "bintype") # Get package type 
+        case "$bintype" in 
+            "default" )
+                binurl=$($BASE/packages/$1 "binurl")
+                ofile=$($BASE/packages/$1 "o_file")
+                md5=$($BASE/packages/$1 "md5")
+                exetyp=$($BASE/packages/$1 "exetype")
+                
+                echo "Downloading $ofile..."
+                #result=$(wpm_download $ofile "$binurl")
+                result="0"
+                if [[ "$result" = "0" ]]; then 
+                    echo "Binary downloaded!"
+                    md5bin=$(md5sum $BASE/binaries/$ofile)
+                    declare -a md5bin2=($md5bin)
+                    md5bin=${md5bin2[0]}
+                    if [[ "$md5" = $md5bin ]] ; then 
+                        echo "Executing binary file"
+                        cd $BASE/binaries/
+                        $exetyp $ofile
+                        result=$?
+                        cd -
+                        if [[ "$result" = "0" ]]; then 
+                            echo "$1" >> $BASE/installed
+                        else
+                            echo "[$result] ERROR executing binary file or installation was cancelled"
+                        fi
+                    else 
+                        echo "MD5 sum don't match! "
+                        echo "$md5 - $md5bin"
+                    fi
+                else 
+                    echo -e "\n\t[$result] Error downloading $ofile ($binurl)"
+                fi
+        esac
+    else
+        echo "=================================================="
+        echo "$found packages found for that name."
+    fi
 }
 
 function wpm_usage {
@@ -29,17 +97,29 @@ function wpm_usage {
     echo -e $OPTIONS
 }
 
+function wpm_download {
+    curl -o $BASE/binaries/$1 $2
+    result=$?
+    echo $result
+}
+
 #---------------------------------------------------#
 # Main 
 #---------------------------------------------------#
-
 if [ -z $1 ] ; then
     wpm_usage
 fi
 
 case "$1" in 
     "search" ) 
-        wpm_search $2;;
+        echo "Searching $2... " 
+        echo "---------------------"
+        result=$(wpm_search $2) 
+        #echo $result
+        packages=$(wpm_print_found "$result")
+        found=$(wpm_found "$result")
+        echo -e "Packages found: \n=====================\n$packages\n====================="
+        echo "Match $found";;
     "install" )
         if [ -z $2 ] ; then 
             wpm_usage
