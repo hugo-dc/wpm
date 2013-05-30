@@ -1,6 +1,5 @@
+    Usage: ./wpm [option] [package]
 
-Usage: ./wpm [option] [package]
-
-Options
-	search	[package]
-	install	<package>
+    Options
+        search	[package]
+        install	<package>
