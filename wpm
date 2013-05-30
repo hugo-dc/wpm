@@ -110,6 +110,11 @@ if [ -z $1 ] ; then
     wpm_usage
 fi
 
+# Check if installed file exists
+if ! [ -f $BASE/installed ]; then 
+    touch $BASE/installed
+fi
+
 case "$1" in 
     "search" ) 
         echo "Searching $2... " 
