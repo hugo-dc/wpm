@@ -1,0 +1,50 @@
+#!/bin/bash
+
+USAGE="\nUsage: $0 [option] [package]"
+OPTIONS="\tsearch\t[package]\n\tinstall\t<package>"
+BASE=`dirname $0`
+
+
+function wpm_search {
+    local pkg=$(echo $1 | tr '[A-Z]' '[a-z]' )
+    
+    echo "Searching $1... " 
+   
+    total=0
+    for pack in $(ls $BASE/packages)
+    do 
+        echo pack 
+        $total = $total + 1
+    done
+    echo -e "===================\nTotal packages: $total"
+}
+
+function wpm_install {
+    echo "Installing... $1"
+}
+
+function wpm_usage {
+    echo -e $USAGE
+    echo -e "\nOptions"
+    echo -e $OPTIONS
+}
+
+#---------------------------------------------------#
+# Main 
+#---------------------------------------------------#
+
+if [ -z $1 ] ; then
+    wpm_usage
+fi
+
+case "$1" in 
+    "search" ) 
+        wpm_search $2;;
+    "install" )
+        if [ -z $2 ] ; then 
+            wpm_usage
+        else
+            wpm_install $2
+        fi
+esac
+
