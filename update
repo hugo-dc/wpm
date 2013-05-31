@@ -4,7 +4,7 @@ inipath=$(pwd)
 cd ~/bin/wpm 
 git pull & 
 cd "$initpath"
-cd ~/bin/packages
+cd ~/bin/wpm/packages
 echo "Recent packages"
 ls -la | awk ' {print $6,$7,$9; }' | sed "1,4d" | head -n 10
 
