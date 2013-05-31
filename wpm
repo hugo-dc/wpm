@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USAGE="\nUsage: $0 [option] [package]"
+USAGE="\nUsage: wpm [option] [package]"
 OPTIONS="\tsearch\t[package]\n\tinstall\t<package>\n\tupdate"
 BASE=`dirname $0`
 
@@ -229,7 +229,7 @@ function wpm_md5 {
 
 function update_wpm {
     echo "Update..."
-    if [[ ! -d "~/bin/wpm" ]] ; then 
+    if [ ! -d "~/bin/wpm" ] ; then 
         echo 'wpm is not installed correctly'
     else 
         inipath=$(pwd)
