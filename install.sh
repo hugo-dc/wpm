@@ -23,6 +23,7 @@ result=$?
 
 if [[ "$result" = "0" ]] ; then 
     mkdir ~/bin/wpm/binaries
+    touch ~/bin/wpm/wpmsource
     echo "Adding wpm to your PATH..."
     echo 
     echo -n $'  echo \'export PATH="PATH:';
