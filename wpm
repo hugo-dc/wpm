@@ -29,9 +29,9 @@ function wpm_search {
             fi
 
             if [[ "$fii" = "0" ]] ; then 
-                stat="$tab- INSTALLED"
+                stat="$tab INSTALLED"
             else
-                stat="$tab- NOT INSTALLED"
+                stat="$tab NOT INSTALLED"
             fi
             echo -e "$pack $stat"
             if [[ "$pack" = $1 ]] ; then 
@@ -201,6 +201,14 @@ function wpm_install {
 }
 
 function wpm_usage {
+    echo "_______________________________________________"
+    echo "__ __ __  _ __   _ __"  
+    echo "\ V  V / | |_ \ | |  \\" 
+    echo " \_/\_/  | .__/ |_|_|_|"
+    echo "         |_|"           
+    echo "_______________________________________________"
+    echo "simple package manager for gitbash"
+    echo "_______________________________________________"
     echo -e $USAGE
     echo -e "\nOptions"
     echo -e $OPTIONS
@@ -244,14 +252,6 @@ function update_wpm {
 # Main 
 #---------------------------------------------------#"
 
-echo "_______________________________________________"
-echo "__ __ __  _ __   _ __"  
-echo "\ V  V / | |_ \ | |  \\" 
-echo " \_/\_/  | .__/ |_|_|_|"
-echo "         |_|"           
-echo "_______________________________________________"
-echo "simple package manager for gitbash"
-echo "_______________________________________________"
 
 if [ -z $1 ] ; then
     wpm_usage
@@ -260,13 +260,14 @@ fi
 case "$1" in 
     "search" ) 
         echo "Searching $2... " 
-        echo "---------------------"
+        echo ""
         result=$(wpm_search $2) 
         #echo $result
         packages=$(wpm_print_found "$result")
         found=$(wpm_found "$result")
-        echo -e "Packages found: \n===================================="
-        echo -e "$packages       \n===================================="
+        echo -e "Packages found: \n"
+        echo -e "NAME\t\tSTATUS\n"
+        echo -e "$packages       \n---------------------------------------"
         echo "Match $found";;
     "install" )
         if [ -z $2 ] ; then 
