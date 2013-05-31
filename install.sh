@@ -19,13 +19,17 @@ fi
 cd $BIN_DIR/bin
 echo "Cloning wpm repository..."
 git clone git://github.com/hugo-dc/wpm.git
-echo "Adding wpm to your PATH..."
+$result=$?
 
-echo 
-echo -n $'  echo \'export PATH="PATH:';
-echo "$BIN_DIR/bin/wpm\"' >> ~/.bashrc";
-echo 'export PATH=$PATH:~/bin/wpm' >> ~/.bashrc
-echo "source ~/bin/wpm/wpmsource" >> ~/.bashrc
-
-source ~/.bashrc
+if [[ "$result" = "0" ]] ; then 
+    mkdir ~/bin/wpm/binaries
+    echo "Adding wpm to your PATH..."
+    echo 
+    echo -n $'  echo \'export PATH="PATH:';
+    echo "$BIN_DIR/bin/wpm\"' >> ~/.bashrc";
+    echo 'export PATH=$PATH:~/bin/wpm' >> ~/.bashrc
+    echo "source ~/bin/wpm/wpmsource" >> ~/.bashrc
+    source ~/.bashrc
+else
+    echo "[$result] Error downloading!"
 
