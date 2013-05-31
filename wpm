@@ -240,10 +240,7 @@ function update_wpm {
     if [ ! -d ~/bin/wpm ] ; then 
         echo 'wpm is not installed correctly'
     else 
-        inipath=$(pwd)
-        cd ~/bin/wpm 
-        git pull & 
-        cd "$initpath"
+        ~/bin/wpm/update &
         exit
     fi
 }
