@@ -6,7 +6,7 @@ BASE=`dirname $0`
 
 function wpm_search {
     pkg=""
-    if  [[ ! -z $1 ]] ; then 
+    if  [ ! -z $1 ] ; then 
         local pkg=$(echo $1 | tr '[A-Z]' '[a-z]' )
     fi
    
@@ -15,8 +15,7 @@ function wpm_search {
     for pack in $(ls $BASE/packages)
     do 
         if [[ "$pack" = *$1* ]] ; then
-            cat installed | grep -Fx "$pack" > tmp
-            fii=$?
+            fii=$($BASE/packages/$pack check_install)
             if [[ "$fii" = "0" ]] ; then 
                 stat="- INSTALLED"
             else
@@ -45,46 +44,150 @@ function wpm_found {
     echo "$result"
 }
 
+function install_exe {
+    binurl=$($BASE/packages/$1 "binurl")
+    ofile=$($BASE/packages/$1 "o_file")
+    md5=$($BASE/packages/$1 "md5")
+    
+    echo "Downloading $ofile..."
+    result=$(wpm_download $ofile "$binurl")
+    if [[ "$result" = "0" ]]; then 
+        echo "Binary downloaded!"
+        result=$(wpm_md5 $md5 "$BASE/binaries/$ofile")
+        if [[ "$result" = "0" ]] ; then 
+            echo "Executing binary file"
+            cd $BASE/binaries/
+            $2 $ofile
+            result=$?
+            cd - >> stderr
+            if [[ "$result" = "0" ]]; then 
+                echo "$1" >> $BASE/installed
+            else
+                echo "[$result] ERROR executing binary file or installation was cancelled"
+            fi
+        else 
+            echo $result
+        fi
+    fi
+}
+
+function install_tarball {
+    binurl=$($BASE/packages/$1 "binurl")
+    ofile=$($BASE/packages/$1 "o_file")
+    md5=$($BASE/packages/$1 "md5")
+
+    echo "Downloading $ofile..."
+    result=$(wpm_download $ofile "$binurl")
+
+    if [[ "$result" = "0" ]] ; then 
+        echo "Tarball downloaded!"
+        $result=$(wpm_md5 $md5 "$BASE/binaries/$ofile")
+        if [[ "$result" = "0" ]] ; then 
+            echo "Extracting tarball..."
+            cd $BASE/binaries/
+            tar -xvf $ofile 
+            result=$?
+            cd - >> stderr 
+            if [[ "$result" = "0" ]] ; then 
+               setup=$($BASE/packages/$1 "setup_command")
+               fpath=${ofile%.*}
+               fpath=${fpath%.*}
+               cd $BASE/binaries/$fpath 
+               $setup
+               result=$?
+               cd - >> stderr 
+               if [[ "$result" = "0" ]] ; then 
+                    echo "$1" >> $BASE/installed
+                else 
+                    echo "[$result] Error executing setup command" 
+               fi
+            fi
+        else 
+            echo $result
+        fi
+    fi
+
+}
+
+function install_github {
+    repourl=$($BASE/packages/$1 "binurl")
+    git clone $repourl $BASE/binaries/$1
+    result=$?
+
+    if [[ "$result" = "0" || "$result" = "128" ]] ; then 
+        if [[ "$result" = "128" ]] ; then 
+            echo "Repository already downloaded"
+        fi
+        setup=$($BASE/packages/$1 "setup_command")
+        cd $BASE/binaries/$1
+        $setup 
+        result=$?
+        cd - >> stderr
+        if [[ "$result" = "0" ]] ; then 
+            echo "$1" >> $BASE/installed
+        else 
+            echo "[$result] Error executing setup command"
+        fi
+    else 
+        echo "[$result] Error cloning github repository"
+    fi
+
+
+}
+
+function dependencies {
+    result="0"
+    for pack in $1 
+    do
+        result="0"
+        if [ ! -f $BASE/packages/$pack ] ; then 
+            result="4"
+            if [ ! -z $2 ] ; then 
+                if [[ "$2" = "print" ]] ; then 
+                    echo "$pack - not exists in wpm"
+                fi
+            fi
+        else 
+            res=$($BASE/packages/$pack check_install )
+            if [[ ! "$res" = "0" ]] ; then 
+                result=$res
+                if [ ! -z $2 ] ; then 
+                    if [[ "$2" = "print" ]] ; then 
+                        echo "$pack"
+                    fi 
+                fi
+            fi
+        fi
+    done
+    if [ -z $2 ]; then 
+        echo $result
+    fi
+}
+
 function wpm_install {
     result=$(wpm_search $1) 
     result=$(echo $result | tr -d "\n")
     found=$(wpm_found "$result")
     if [[ "$found" = "1" ]] ; then 
-        bintype=$($BASE/packages/$1 "bintype") # Get package type 
-        case "$bintype" in 
-            "default" )
-                binurl=$($BASE/packages/$1 "binurl")
-                ofile=$($BASE/packages/$1 "o_file")
-                md5=$($BASE/packages/$1 "md5")
-                exetyp=$($BASE/packages/$1 "exetype")
-                
-                echo "Downloading $ofile..."
-                #result=$(wpm_download $ofile "$binurl")
-                result="0"
-                if [[ "$result" = "0" ]]; then 
-                    echo "Binary downloaded!"
-                    md5bin=$(md5sum $BASE/binaries/$ofile)
-                    declare -a md5bin2=($md5bin)
-                    md5bin=${md5bin2[0]}
-                    if [[ "$md5" = $md5bin ]] ; then 
-                        echo "Executing binary file"
-                        cd $BASE/binaries/
-                        $exetyp $ofile
-                        result=$?
-                        cd -
-                        if [[ "$result" = "0" ]]; then 
-                            echo "$1" >> $BASE/installed
-                        else
-                            echo "[$result] ERROR executing binary file or installation was cancelled"
-                        fi
-                    else 
-                        echo "MD5 sum don't match! "
-                        echo "$md5 - $md5bin"
-                    fi
-                else 
-                    echo -e "\n\t[$result] Error downloading $ofile ($binurl)"
-                fi
-        esac
+        echo "Checking dependencies..."
+        depen=$($BASE/packages/$1 "depend")
+        ok=$(dependencies "$depen" )
+        if [[ "$ok" = "0" ]] ; then 
+            echo "Dependencies OK"
+            bintype=$($BASE/packages/$1 "bintype") # Get package type 
+            case "$bintype" in 
+                "msi" )
+                    install_exe  $1 "msiexec -i " ;;
+                "github" )
+                    install_github $1;;
+                "tarball" )
+                    install_tarball $1;;
+            esac
+        else 
+            dpack=$(dependencies "$depen" "print")
+            echo -e "Please install dependencies"
+            echo -e "====================================\n$dpack"
+        fi
     else
         echo "=================================================="
         echo "$found packages found for that name."
@@ -101,6 +204,21 @@ function wpm_download {
     curl -o $BASE/binaries/$1 $2
     result=$?
     echo $result
+    if [[ ! "$result" = "0" ]] ; then
+        echo -e "\n\t[$result] Error downloading $1 ($2)"
+    fi
+}
+
+function wpm_md5 {
+    md5bin=$(md5sum $2)
+    declare -a md5bin2=($md5bin)
+    md5bin=${md5bin2[0]}
+    if [[ "$1" = $md5bin ]] ; then 
+        echo "0"
+    else 
+        echo "MD5 sum does not match! "
+        echo "$1 - $md5bin"
+    fi
 }
 
 #---------------------------------------------------#

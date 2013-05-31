@@ -1,0 +1,34 @@
+#!/bin/bash 
+
+BINTYP="tarball"
+BINURL="https://pypi.python.org/packages/source/h/httplib2/httplib2-0.8.tar.gz#md5=94cb8a3b196dfd19253c46609489d9f1"
+O_FILE="httplib2-0.8.tar.gz"
+MD5="94cb8a3b196dfd19253c46609489d9f1"
+SETUP="python setup.py install"
+
+function check_install {
+    python -c 'exec "try: import httplib2\nexcept:exit(4)"'
+    echo $?
+}
+
+case "$1" in 
+    "bintype" )
+        echo $BINTYP;;
+    "binurl" )
+        echo $BINURL;;
+    "o_file" )
+        echo $O_FILE;;
+    "md5" ) 
+        echo $MD5;;
+    "depend" )
+        echo "";;
+    "setup_command" )
+        echo $SETUP;;
+    "check_install" ) 
+        check_install;;
+    "author" ) 
+        echo "@hugo_dc" ;; 
+esac
+
+
+

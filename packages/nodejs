@@ -1,10 +1,15 @@
 #!/bin/bash
 
-BINTYP="default"
+BINTYP="msi"
 BINURL="http://nodejs.org/dist/v0.10.8/node-v0.10.8-x86.msi"
 O_FILE="node-v0.10.8-x86.msi"
-EXETYP="msiexec -i "
 MD5="a363dbcaf9f2fbee955d890351afba34"
+declare -a DEPEND=("msiexec")
+
+function check_install {
+    node --version >> stderr
+    echo $?
+}
 
 case "$1" in 
     "bintype" )
@@ -15,7 +20,10 @@ case "$1" in
         echo $O_FILE;;
     "md5" ) 
         echo $MD5;;
-    "exetype" )
-        echo $EXETYP;;
+    "depend" )
+        echo ${DEPEND[@]};; 
+    "check_install" )
+        check_install;;
+
 esac
 

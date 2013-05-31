@@ -1,0 +1,11 @@
+#!/bin/bash
+
+function check_install {
+    type msiexec >> stderr
+    echo $?
+}
+
+case "$1" in 
+    "check_install" ) 
+        check_install;; 
+esac 
