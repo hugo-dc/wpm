@@ -19,7 +19,7 @@ fi
 cd $BIN_DIR/bin
 echo "Cloning wpm repository..."
 git clone git://github.com/hugo-dc/wpm.git
-$result=$?
+result=$?
 
 if [[ "$result" = "0" ]] ; then 
     mkdir ~/bin/wpm/binaries
@@ -32,4 +32,7 @@ if [[ "$result" = "0" ]] ; then
     source ~/.bashrc
 else
     echo "[$result] Error downloading!"
+fi
+
+
 

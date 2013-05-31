@@ -234,11 +234,9 @@ function update_wpm {
     else 
         inipath=$(pwd)
         cd ~/bin/wpm 
-        git pull
-        cd packages 
-        echo -e "Last packages:\n"
-        ls -la | awk ' {print $6,$7,$9; }' | sed "1,4d"
+        git pull & 
         cd "$initpath"
+        exit
     fi
 }
 
