@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/usr/bin/env bash
 
 BINTYP="github"
 BINURL="git://github.com/simplegeo/python-oauth2.git"

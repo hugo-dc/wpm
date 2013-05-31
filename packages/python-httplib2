@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/usr/bin/env bash
 
 BINTYP="tarball"
 BINURL="https://pypi.python.org/packages/source/h/httplib2/httplib2-0.8.tar.gz#md5=94cb8a3b196dfd19253c46609489d9f1"

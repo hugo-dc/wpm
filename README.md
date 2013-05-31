@@ -32,5 +32,7 @@ Usage
     Options
         search	[package]
         install	<package>
+        update 
+
 
 
