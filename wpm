@@ -1,7 +1,7 @@
 #!/bin/bash
 
 USAGE="\nUsage: $0 [option] [package]"
-OPTIONS="\tsearch\t[package]\n\tinstall\t<package>"
+OPTIONS="\tsearch\t[package]\n\tinstall\t<package>\n\tupdate"
 BASE=`dirname $0`
 
 function wpm_search {
@@ -16,10 +16,22 @@ function wpm_search {
     do 
         if [[ "$pack" = *$1* ]] ; then
             fii=$($BASE/packages/$pack check_install)
+            len=$(echo ${#pack}) 
+
+            if [ $len -gt 14 ]; then 
+                tab=""
+            else 
+                if [ $len -gt 6 ] ; then 
+                    tab="\t"
+                else 
+                    tab="\t\t"
+                fi
+            fi
+
             if [[ "$fii" = "0" ]] ; then 
-                stat="- INSTALLED"
+                stat="$tab- INSTALLED"
             else
-                stat="- NOT INSTALLED"
+                stat="$tab- NOT INSTALLED"
             fi
             echo -e "$pack $stat"
             if [[ "$pack" = $1 ]] ; then 
@@ -60,9 +72,7 @@ function install_exe {
             $2 $ofile
             result=$?
             cd - >> stderr
-            if [[ "$result" = "0" ]]; then 
-                echo "$1" >> $BASE/installed
-            else
+            if [[ ! "$result" = "0" ]]; then 
                 echo "[$result] ERROR executing binary file or installation was cancelled"
             fi
         else 
@@ -96,9 +106,7 @@ function install_tarball {
                $setup
                result=$?
                cd - >> stderr 
-               if [[ "$result" = "0" ]] ; then 
-                    echo "$1" >> $BASE/installed
-                else 
+               if [[ ! "$result" = "0" ]] ; then 
                     echo "[$result] Error executing setup command" 
                fi
             fi
@@ -123,9 +131,7 @@ function install_github {
         $setup 
         result=$?
         cd - >> stderr
-        if [[ "$result" = "0" ]] ; then 
-            echo "$1" >> $BASE/installed
-        else 
+        if [[ ! "$result" = "0" ]] ; then 
             echo "[$result] Error executing setup command"
         fi
     else 
@@ -221,17 +227,35 @@ function wpm_md5 {
     fi
 }
 
+function update_wpm {
+    echo "Update..."
+    if [[ ! -d "~/bin/wpm" ]] ; then 
+        echo 'wpm is not installed correctly'
+    else 
+        inipath=$(pwd)
+        cd ~/bin/wpm 
+        git pull
+        cd packages 
+        echo -e "Last packages:\n"
+        ls -la | awk ' {print $6,$7,$9; }' | sed "1,4d"
+        cd "$initpath"
+    fi
+}
+
 #---------------------------------------------------#
 # Main 
-#---------------------------------------------------#
+#---------------------------------------------------#"
+
+echo "______________________________________________"
+echo "__ __ __  _ __   _ __"  
+echo "\ V  V / | |_ \ | |  \\" 
+echo " \_/\_/  | .__/ |_|_|_|"
+echo "         |_|"           
+echo "______________________________________________"
+
 if [ -z $1 ] ; then
     wpm_usage
-fi
-
-# Check if installed file exists
-if ! [ -f $BASE/installed ]; then 
-    touch $BASE/installed
-fi
+fi 
 
 case "$1" in 
     "search" ) 
@@ -241,13 +265,17 @@ case "$1" in
         #echo $result
         packages=$(wpm_print_found "$result")
         found=$(wpm_found "$result")
-        echo -e "Packages found: \n=====================\n$packages\n====================="
+        echo -e "Packages found: \n===================================="
+        echo -e "$packages       \n===================================="
         echo "Match $found";;
     "install" )
         if [ -z $2 ] ; then 
             wpm_usage
         else
             wpm_install $2
-        fi
+        fi ;; 
+    "update" )
+        update_wpm;;
+
 esac
 

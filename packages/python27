@@ -4,24 +4,12 @@ BINTYP="msi"
 BINURL="http://python.org/ftp/python/2.7.5/python-2.7.5.msi"
 O_FILE="python-2.7.5.msi"
 MD5=""
-DEPEND="msiexec"
-
-function dependencies {
-    type $DEPEND > stderr
-    result=$?
-    if  [[ ! "$result" = "0" ]]; then 
-        PATH=$PATH:/c/Windows/system32/
-        export $PATH
-        result=$?
-    fi
-    echo $result
-}
+declare -a DEPEND=("msiexec")
 
 function check_install {
     type python  >> stderr 
     echo $?
 }
-
 
 case "$1" in 
     "bintype" )
@@ -35,9 +23,7 @@ case "$1" in
     "exetype" )
         echo $EXETYP;;
     "depend" )
-        dependencies;;
-    "show_depend" )
-        echo -e $DEPEND;; 
+        echo ${DEPEND[@]};;
     "check_install" )
         check_install;;
 
