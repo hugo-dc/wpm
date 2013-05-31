@@ -229,7 +229,7 @@ function wpm_md5 {
 
 function update_wpm {
     echo "Update..."
-    if [ ! -d "~/bin/wpm" ] ; then 
+    if [ ! -d ~/bin/wpm ] ; then 
         echo 'wpm is not installed correctly'
     else 
         inipath=$(pwd)
