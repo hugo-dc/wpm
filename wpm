@@ -7,7 +7,7 @@ BASE=`dirname $0`
 function wpm_search {
     pkg=""
     if  [ ! -z $1 ] ; then 
-        local pkg=$(echo $1 | tr '[A-Z]' '[a-z]' )
+        pkg=$(echo $1 | tr '[A-Z]' '[a-z]' )
     fi
    
     local total=0

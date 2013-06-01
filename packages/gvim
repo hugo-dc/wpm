@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+BINTYP="default"
+BINURL="ftp://ftp.vim.org/pub/vim/pc/gvim73_46.exe"
+O_FILE="gvim73_46.exe"
+MD5="a363dbcaf9f2fbee955d890351afba34"
+SETUP=""
+
+function check_install {
+    a=$(which gvim) 
+    echo $?
+}
+
+case "$1" in 
+    "bintype" )
+        echo $BINTYP;;
+    "binurl" )
+        echo $BINURL;;
+    "o_file" )
+        echo $O_FILE;;
+    "md5" ) 
+        echo $MD5;;
+    "setup_command" )
+        echo $SETUP ;;
+esac
+
