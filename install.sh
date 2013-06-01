@@ -22,6 +22,7 @@ git clone git://github.com/hugo-dc/wpm.git
 result=$?
 
 if [[ "$result" = "0" ]] ; then 
+    touch ~/bin/wpm/wpmsource
     mkdir ~/bin/wpm/installers
     mkdir ~/bin/wpm/bin
     echo 'export PATH=$PATH:~/bin/wpm/bin:/C/Windows/System32' ~/bin/wpm/wpmsource
