@@ -9,7 +9,7 @@ function setup {
     echo "cd $O_FILE ; "
     echo "cp edx-dl.py ~/bin/wpm/bin/edx-dl.py ; "
     echo "echo -e '#!/bin/bash' > ~/bin/wpm/bin/edx-dl"
-    echo "echo -e 'python ~/bin/wpm/bin/edx-dl.py' >> ~/bin/wpm/bin/edx-dl"
+    echo "echo -e 'python ~/bin/wpm/bin/edx-dl.py \$@' >> ~/bin/wpm/bin/edx-dl"
     echo "cd - >> stderr ; "
 }
 
