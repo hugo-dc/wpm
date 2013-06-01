@@ -89,7 +89,11 @@ function wpm_setup {
             echo $result
         fi
     else 
-        echo "[$result] Error downloading!"
+        if [[ "$2" = "github" ]] ; then 
+            echo "[$result] Error downloading!"
+        else 
+            echo "$result"
+        fi
     fi
 }
 

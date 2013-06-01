@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 BINTYP="default"
-BINURL="ftp://ftp.vim.org/pub/vim/pc/gvim73_46.exe"
-O_FILE="gvim73_46.exe"
-MD5="a363dbcaf9f2fbee955d890351afba34"
-SETUP="$O_FILE"
+BINURL="https://fleex.blob.core.windows.net/misc/installer/fleex-1.1.0.exe"
+O_FILE="fleex-1.1.0.exe"
+MD5="a"
+SETUP="cmd //c fleex-1.1.0.exe"
 
 function check_install {
-    a=$(which gvim) 
+    a=$(which fleex) 
     echo $?
 }
 
