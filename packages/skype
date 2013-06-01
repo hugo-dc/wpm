@@ -4,7 +4,7 @@ BINTYP="default"
 BINURL="http://download.skype.com/0d4381ec899c2a4ec64e05c36602bbe8/SkypeSetup.exe"
 O_FILE="SkypeSetup.exe"
 MD5="f4e3fa5e9b6fc7d4194961c6ee24e31f"
-SETUP=""
+SETUP="cmd //c $O_FILE"  #Run Installer from CMD to show UAC
 
 case "$1" in 
     "bintype" )

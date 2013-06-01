@@ -89,7 +89,7 @@ function wpm_setup {
             echo $result
         fi
     else 
-        echo "|[$result] Error downloading!"
+        echo "[$result] Error downloading!"
     fi
 }
 
@@ -163,7 +163,6 @@ function wpm_usage {
 function wpm_download {
     # Check if binary already downloaded
     if [ -f $BASE/installers/$1 ] ; then 
-        echo "Removing..."
         rm $BASE/installers/$1
     fi
     if [ -z $3 ] || [[ "$3" = "default" ]] ; then
