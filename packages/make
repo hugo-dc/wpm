@@ -6,7 +6,7 @@ O_FILE="mingw32-make-3.80.0-3.exe"
 MD5="8ae51379d1f3eef8360df4e674f17d6d"
 
 function setup {
-    echo "echo 'alias make=/C/MinGW/bin/mingw32-make' >> ~/bin/wpm/wpmsource ; "
+    echo "echo -e '#!/bin/bash\nmingw32-make \$@' > ~/bin/wpm/bin/make"
     echo "echo -e '\n*** ATENTION *** After installing please close Gitbash and open it again to load your new command'"
     echo "cmd //c $O_FILE ; "
 }
