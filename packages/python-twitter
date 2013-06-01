@@ -2,8 +2,14 @@
 
 BINTYP="github"
 BINURL="git://github.com/bear/python-twitter.git"
-declare -a DEPEND=( "python27" "python-oauth2" )    # What happens if git is not in PATH?
-SETUP="python setup.py install"
+O_FILE="python-twitter"
+declare -a DEPEND=( "python27" "python-oauth2" )
+
+function setup {
+    echo "cd python-twitter ; "
+    echo "python setup.py install ; "
+    echo "cd - >> stderr ; "
+}
 
 function check_install {
     python -c 'exec "try: import twitter\nexcept:exit(4)"'
@@ -17,8 +23,10 @@ case "$1" in
         echo $BINURL;;
     "depend" )
         echo ${DEPEND[@]};;
+    "o_file" ) 
+        echo $O_FILE ;; 
     "setup_command" )
-        echo $SETUP;;
+        setup;;
     "check_install" ) 
         check_install;;
     "author" ) 

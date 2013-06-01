@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-BINTYP="msi"
+BINTYP="default"
 BINURL="http://python.org/ftp/python/2.7.5/python-2.7.5.msi"
 O_FILE="python-2.7.5.msi"
-MD5=""
+MD5="0006d6219160ce6abe711a71c835ebb0"
 declare -a DEPEND=("msiexec")
+
+SETUP="msiexec -i $O_FILE"
 
 function check_install {
     type python  >> stderr 
@@ -20,11 +22,10 @@ case "$1" in
         echo $O_FILE;;
     "md5" ) 
         echo $MD5;;
-    "exetype" )
-        echo $EXETYP;;
     "depend" )
         echo ${DEPEND[@]};;
     "check_install" )
         check_install;;
-
+    "setup_command" )
+        echo $SETUP ;;
 esac

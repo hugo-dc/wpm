@@ -56,90 +56,43 @@ function wpm_found {
     echo "$result"
 }
 
-function install_exe {
+function wpm_setup {
     binurl=$($BASE/packages/$1 "binurl")
     ofile=$($BASE/packages/$1 "o_file")
     md5=$($BASE/packages/$1 "md5")
-    
+    setup=$($BASE/packages/$1 "setup_command")
+
     echo "Downloading $ofile..."
-    result=$(wpm_download $ofile "$binurl")
+    result=$(wpm_download $ofile "$binurl" $2)
     if [[ "$result" = "0" ]]; then 
-        echo "Binary downloaded!"
-        result=$(wpm_md5 $md5 "$BASE/binaries/$ofile")
+        echo "Package downloaded!"
+        result=$(wpm_md5 $md5 "$BASE/installers/$ofile")
         if [[ "$result" = "0" ]] ; then 
-            echo "Executing binary file"
-            cd $BASE/binaries/
-            $2 $ofile
+            origin=$(pwd)
+            cd $BASE/installers/
+            echo "Executing setup commands"
+            eval "$setup"
             result=$?
-            cd - >> stderr
+            cd $origin >> stderr
             if [[ ! "$result" = "0" ]]; then 
-                echo "[$result] ERROR executing binary file or installation was cancelled"
+                echo "[$result] ERROR executing setup commands or installation was cancelled"
+            else 
+                stat=$($BASE/packages/$1 "check_install")
+                if [[ "$stat" = "0" ]] ; then 
+                    stat="INSTALLED"
+                else 
+                    stat="NOT INSTALLED"
+                fi
+                echo -e "\n\nPackage $1 $stat!"
             fi
         else 
             echo $result
-        fi
-    fi
-}
-
-function install_tarball {
-    binurl=$($BASE/packages/$1 "binurl")
-    ofile=$($BASE/packages/$1 "o_file")
-    md5=$($BASE/packages/$1 "md5")
-
-    echo "Downloading $ofile..."
-    result=$(wpm_download $ofile "$binurl")
-
-    if [[ "$result" = "0" ]] ; then 
-        echo "Tarball downloaded!"
-        $result=$(wpm_md5 $md5 "$BASE/binaries/$ofile")
-        if [[ "$result" = "0" ]] ; then 
-            echo "Extracting tarball..."
-            cd $BASE/binaries/
-            tar -xvf $ofile 
-            result=$?
-            cd - >> stderr 
-            if [[ "$result" = "0" ]] ; then 
-               setup=$($BASE/packages/$1 "setup_command")
-               fpath=${ofile%.*}
-               fpath=${fpath%.*}
-               cd $BASE/binaries/$fpath 
-               $setup
-               result=$?
-               cd - >> stderr 
-               if [[ ! "$result" = "0" ]] ; then 
-                    echo "[$result] Error executing setup command" 
-               fi
-            fi
-        else 
-            echo $result
-        fi
-    fi
-
-}
-
-function install_github {
-    repourl=$($BASE/packages/$1 "binurl")
-    git clone $repourl $BASE/binaries/$1
-    result=$?
-
-    if [[ "$result" = "0" || "$result" = "128" ]] ; then 
-        if [[ "$result" = "128" ]] ; then 
-            echo "Repository already downloaded"
-        fi
-        setup=$($BASE/packages/$1 "setup_command")
-        cd $BASE/binaries/$1
-        $setup 
-        result=$?
-        cd - >> stderr
-        if [[ ! "$result" = "0" ]] ; then 
-            echo "[$result] Error executing setup command"
         fi
     else 
-        echo "[$result] Error cloning github repository"
+        echo "|[$result] Error downloading!"
     fi
-
-
 }
+
 
 function dependencies {
     result="0"
@@ -181,14 +134,7 @@ function wpm_install {
         if [[ "$ok" = "0" ]] ; then 
             echo "Dependencies OK"
             bintype=$($BASE/packages/$1 "bintype") # Get package type 
-            case "$bintype" in 
-                "msi" )
-                    install_exe  $1 "msiexec -i " ;;
-                "github" )
-                    install_github $1;;
-                "tarball" )
-                    install_tarball $1;;
-            esac
+            wpm_setup $1 $bintype
         else 
             dpack=$(dependencies "$depen" "print")
             echo -e "Please install dependencies"
@@ -215,28 +161,46 @@ function wpm_usage {
 }
 
 function wpm_download {
-    curl -o $BASE/binaries/$1 $2
-    result=$?
-    echo $result
+    # Check if binary already downloaded
+    if [ -f $BASE/installers/$1 ] ; then 
+        echo "Removing..."
+        rm $BASE/installers/$1
+    fi
+    if [ -z $3 ] || [[ "$3" = "default" ]] ; then
+        curl -o $BASE/installers/$1 $2 >> stderr
+        result=$?
+    else  # github Repository
+        cd $BASE/installers
+        git clone $2 >> stderr 
+        result=$?
+        cd - >> stderr
+        if [[ "$result" = "128" ]]; then # repository already downloaded
+            result="0"
+        fi
+    fi
     if [[ ! "$result" = "0" ]] ; then
         echo -e "\n\t[$result] Error downloading $1 ($2)"
     fi
+    echo $result
 }
 
 function wpm_md5 {
-    md5bin=$(md5sum $2)
-    declare -a md5bin2=($md5bin)
-    md5bin=${md5bin2[0]}
-    if [[ "$1" = $md5bin ]] ; then 
-        echo "0"
-    else 
-        echo "MD5 sum does not match! "
-        echo "$1 - $md5bin"
+    if [[ ! -z $1 ]] ; then 
+        echo "0" #
+    else
+        md5bin=$(md5sum $2)
+        declare -a md5bin2=($md5bin)
+        md5bin=${md5bin2[0]}
+        if [[ "$1" = $md5bin ]] ; then 
+            echo "0"
+        else 
+            echo "MD5 sum does not match! "
+            echo "$1 - $md5bin"
+        fi
     fi
 }
 
 function update_wpm {
-    echo "Update..."
     if [ ! -d ~/bin/wpm ] ; then 
         echo 'wpm is not installed correctly'
     else 

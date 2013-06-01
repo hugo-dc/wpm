@@ -6,6 +6,8 @@ O_FILE="node-v0.10.8-x86.msi"
 MD5="a363dbcaf9f2fbee955d890351afba34"
 declare -a DEPEND=("msiexec")
 
+SETUP="msiexec -i"
+
 function check_install {
     node --version >> stderr
     echo $?
@@ -24,6 +26,7 @@ case "$1" in
         echo ${DEPEND[@]};; 
     "check_install" )
         check_install;;
-
+    "setup_command" )
+        echo $SETUP ;;
 esac
 

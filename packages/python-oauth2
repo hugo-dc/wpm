@@ -2,8 +2,14 @@
 
 BINTYP="github"
 BINURL="git://github.com/simplegeo/python-oauth2.git"
+O_FILE="python-oauth2"
 declare -a DEPEND=( "python27" "python-httplib2" )    # What happens if git is not in PATH?
-SETUP="python setup.py install"
+
+function setup {
+    echo "cd python-oauth2 ; "
+    echo "python setup.py install ;"
+    echo "cd - >> stderr ; "
+}
 
 
 function check_install {
@@ -19,8 +25,10 @@ case "$1" in
         echo $BINURL;;
     "depend" )
         echo ${DEPEND[@]};;
+    "o_file" ) 
+        echo $O_FILE ;; 
     "setup_command" )
-        echo $SETUP;;
+        setup ;; 
     "check_install" ) 
         check_install;;
     "author" ) 

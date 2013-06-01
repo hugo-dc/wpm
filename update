@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+echo "Running update script..."
 inipath=$(pwd)
 cd ~/bin/wpm 
 git pull & 

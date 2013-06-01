@@ -1,10 +1,21 @@
 #!/usr/bin/env bash
 
-BINTYP="tarball"
+BINTYP="default"
 BINURL="https://pypi.python.org/packages/source/h/httplib2/httplib2-0.8.tar.gz#md5=94cb8a3b196dfd19253c46609489d9f1"
 O_FILE="httplib2-0.8.tar.gz"
 MD5="94cb8a3b196dfd19253c46609489d9f1"
-SETUP="python setup.py install"
+
+function setup {
+    echo "tar -xvf $O_FILE ; "
+
+    expath=${O_FILE%.*}
+    expath=${expath%.*}
+
+    echo "cd $expath ; "
+    echo "python setup.py install ;"
+    echo "cd - >> stderr ;"
+}
+
 
 function check_install {
     python -c 'exec "try: import httplib2\nexcept:exit(4)"'
@@ -23,7 +34,7 @@ case "$1" in
     "depend" )
         echo "";;
     "setup_command" )
-        echo $SETUP;;
+        setup ;; 
     "check_install" ) 
         check_install;;
     "author" ) 

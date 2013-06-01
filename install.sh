@@ -22,8 +22,9 @@ git clone git://github.com/hugo-dc/wpm.git
 result=$?
 
 if [[ "$result" = "0" ]] ; then 
-    mkdir ~/bin/wpm/binaries
-    touch ~/bin/wpm/wpmsource
+    mkdir ~/bin/wpm/installers
+    mkdir ~/bin/wpm/bin
+    echo 'export PATH=$PATH:~/bin/wpm/bin:/C/Windows/System32' ~/bin/wpm/wpmsource
     echo "Adding wpm to your PATH..."
     echo 
     echo -n $'  echo \'export PATH="PATH:';
