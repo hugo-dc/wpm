@@ -6,6 +6,16 @@ O_FILE="SkypeSetup.exe"
 MD5="f4e3fa5e9b6fc7d4194961c6ee24e31f"
 SETUP="cmd //c $O_FILE"  #Run Installer from CMD to show UAC
 
+
+function check_install {
+    DEFINST="/C/Program Files (x86)/Skype"   
+    if [ -d "$DEFINST" ] ; then 
+        echo "0"
+    else 
+        echo "1"
+    fi
+}
+
 case "$1" in 
     "bintype" )
         echo $BINTYP;;
@@ -17,4 +27,6 @@ case "$1" in
         echo $MD5;;
     "setup_command" )
         echo $SETUP ;;
+    "check_install" )
+        check_install;;
 esac

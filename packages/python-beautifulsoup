@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+BINTYP="default"
+BINURL="http://www.crummy.com/software/BeautifulSoup/bs4/download/4.0/beautifulsoup4-4.1.0.tar.gz"
+O_FILE="beautifulsoup4-4.1.0.tar.gz"
+MD5="94cb8a3b196dfd19253c46609489d9f1"
+
+function setup {
+    echo "tar -xvf $O_FILE ; "
+
+    expath=${O_FILE%.*}
+    expath=${expath%.*}
+
+    echo "cd $expath ; "
+    echo "python setup.py install ;"
+    echo "cd - >> stderr ;"
+}
+
+
+function check_install {
+    python -c 'exec "try: from bs4 import BeautifulSoup\nexcept:exit(4)"'
+    echo $?
+}
+
+case "$1" in 
+    "bintype" )
+        echo $BINTYP;;
+    "binurl" )
+        echo $BINURL;;
+    "o_file" )
+        echo $O_FILE;;
+    "md5" ) 
+        echo $MD5;;
+    "depend" )
+        echo "";;
+    "setup_command" )
+        setup ;; 
+    "check_install" ) 
+        check_install;;
+    "author" ) 
+        echo "@hugo_dc" ;; 
+esac
+
+
+

@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
 
 BINTYP="github"
-BINURL="git://github.com/bear/python-twitter.git"
-O_FILE="python-twitter"
-declare -a DEPEND=( "python27" "python-oauth2" )
+BINURL="git://github.com/shk3/edx-downloader.git"
+O_FILE="edx-downloader"
+declare -a DEPEND=( "python27" "youtube-dl" "python-beautifulsoup" )
 
 function setup {
     echo "cd $O_FILE ; "
-    echo "python setup.py install ; "
+    echo "cp edx-dl.py ~/bin/wpm/bin/edx-dl.py ; "
     echo "cd - >> stderr ; "
 }
 
 function check_install {
-    python -c 'exec "try: import twitter\nexcept:exit(4)"'
-    echo $?
+    if [ -z ~/bin/wpm/bin/edx-dl.py ] ; then 
+        echo "0"
+    else
+        echo "1"
+    fi
 }
 
 case "$1" in 

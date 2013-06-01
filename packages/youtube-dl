@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
 
-BINTYP="github"
-BINURL="git://github.com/bear/python-twitter.git"
-O_FILE="python-twitter"
-declare -a DEPEND=( "python27" "python-oauth2" )
+BINTYP="default"
+BINURL="http://youtube-dl.org/downloads/2013.05.23/youtube-dl.exe"
+MD5="c52e32387770395629b96d22cede833f"
+O_FILE="youtube-dl.exe"
+#declare -a DEPEND=( "python27" )
 
 function setup {
-    echo "cd $O_FILE ; "
-    echo "python setup.py install ; "
-    echo "cd - >> stderr ; "
+    echo "cp $O_FILE ~/bin/wpm/bin/$O_FILE"
 }
 
 function check_install {
-    python -c 'exec "try: import twitter\nexcept:exit(4)"'
+    which youtube-dl >> stderr
     echo $?
 }
 
@@ -32,3 +31,4 @@ case "$1" in
     "author" ) 
         echo "@hugo_dc" ;; 
 esac
+
