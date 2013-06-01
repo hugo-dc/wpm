@@ -8,6 +8,8 @@ declare -a DEPEND=( "python27" "youtube-dl" "python-beautifulsoup" )
 function setup {
     echo "cd $O_FILE ; "
     echo "cp edx-dl.py ~/bin/wpm/bin/edx-dl.py ; "
+    echo "echo -e '#!/usr/bin/env bash ' > ~/bin/wpm/bin/edx-dl"
+    echo "exho -e 'python ~/bin/wpm/bin/edx-dl.py' >> ~/bin/wpm/bin/edx-dl"
     echo "cd - >> stderr ; "
 }
 
