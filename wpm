@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 USAGE="\nUsage: wpm [option] [package]"
-OPTIONS="\tsearch\t[package]\n\tinstall\t<package>\n\tupdate"
+OPTIONS="\tsearch\t[package]\t\t - Search for packages | List packages"
+OPTIONS="$OPTIONS\n\tinstall\t<package>\t\t - Installs new package"
+OPTIONS="$OPTIONS\n\tcreate\t<package> [type]\t - Types [default|github]"
+OPTIONS="$OPTIONS\n\tupdate\t\t\t\t - Update wpm (git pull to main repository)"
 BASE=`dirname $0`
 
 function wpm_search {
@@ -28,11 +31,15 @@ function wpm_search {
                 fi
             fi
 
-            if [[ "$fii" = "0" ]] ; then 
-                stat="$tab INSTALLED"
-            else
-                stat="$tab NOT INSTALLED"
-            fi
+            case "$fii" in 
+                "0" ) 
+                    stat="$tab INSTALLED" ;;
+                "NEW" )
+                    stat="$tab NEW PACKAGE" ;;
+                * )
+                    stat="$tab NOT INSTALLED" ;;
+            esac
+
             echo -e "$pack $stat"
             if [[ "$pack" = $1 ]] ; then 
                 let match=match+1
@@ -151,14 +158,12 @@ function wpm_install {
 }
 
 function wpm_usage {
-    echo "_______________________________________________"
     echo "__ __ __  _ __   _ __"  
     echo "\ V  V / | |_ \ | |  \\" 
     echo " \_/\_/  | .__/ |_|_|_|"
     echo "         |_|"           
-    echo "_______________________________________________"
+    echo "______________________________________________________________________________________"
     echo "simple package manager for gitbash"
-    echo "_______________________________________________"
     echo -e $USAGE
     echo -e "\nOptions"
     echo -e $OPTIONS
@@ -212,11 +217,72 @@ function update_wpm {
     fi
 }
 
+function skel_pack {
+    pack=$BASE/packages/$1
+    echo "#!/bin/bash"                                                       > $pack
+    echo ""                                                                 >> $pack
+    echo "BINTYP=\"$2\""                                                    >> $pack
+    echo 'BINURL="" '                                                       >> $pack
+    echo 'O_FILE="" '                                                       >> $pack
+    if [[ "$2" = "default" ]] ; then 
+        echo 'MD5=""'                                                       >> $pack
+    fi
+    echo -e "declare -a DEPEND=(\"\")\n"                                    >> $pack
+    echo "function setup {"                                                 >> $pack
+    if [[ "$2" = "github" ]] ; then 
+        echo -e "\techo \"cd \$O_FILE ; \""                                 >> $pack
+    fi
+    echo -e "\techo \"\" # put setup command here, end it with semicolon ;" >> $pack
+    echo -e "\techo \"cd - >> stderr ; \""                                  >> $pack
+    echo -e "}\n"                                                           >> $pack
+    echo "function check_install {"                                         >> $pack
+    echo -e "\t# Check if the package is installed in the system"           >> $pack
+    echo -e "\techo \"NEW\" # change this line for your search commands "   >> $pack
+    echo -e "\t#echo \$? # return 0 if package is installed "               >> $pack
+    echo -e "}\n"                                                           >> $pack
+    echo -e "case \"\$1\" in"                                               >> $pack
+    echo -e "\t\"bintype\" )"                                               >> $pack
+    echo -e "\t\techo \$BINTYP;;"                                           >> $pack
+    echo -e "\t\"binurl\" )"                                                >> $pack
+    echo -e "\t\techo \$BINURL;;"                                           >> $pack
+    echo -e "\t\"depend\" )"                                                >> $pack
+    echo -e "\t\techo \${DEPEND[@]};;"                                      >> $pack
+    echo -e "\t\"o_file\" )"                                                >> $pack
+    echo -e "\t\techo \$O_FILE;;"                                           >> $pack
+    if [[ "$2" = "default" ]] ; then 
+        echo -e "\t\"md5\" )"                                               >> $pack
+        echo -e "\t\techo \$MD5;;"                                          >> $pack    
+    fi
+    echo -e "\t\"setup_command\" )"                                         >> $pack
+    echo -e "\t\tsetup ;;"                                                  >> $pack
+    echo -e "\t\"check_install\" )"                                         >> $pack
+    echo -e "\t\tcheck_install;;"                                           >> $pack
+    echo -e "esac\n\n"                                                      >> $pack
+
+    echo -e "\nTemplate created in $pack\nNow you can edit the new package"
+    echo -e "\n*** Please consider to share this new package! ***"              
+}
+
+
+function new_package {
+    ptyp=$2
+    if [ -z $2 ] ; then 
+        ptyp="default"
+    fi
+    if [ -f $BASE/packages/$1 ] ; then 
+        echo "Package $1 name already exists!"
+    else 
+        if [[ "$ptyp" = "default" ]] || [[ "$ptyp" = "github" ]] ; then 
+            skel_pack $1 $2;
+        else 
+            echo "Package type $2 not valid!"
+        fi
+    fi
+}
+
 #---------------------------------------------------#
 # Main 
 #---------------------------------------------------#"
-
-
 if [ -z $1 ] ; then
     wpm_usage
 fi 
@@ -241,6 +307,11 @@ case "$1" in
         fi ;; 
     "update" )
         update_wpm;;
-
+    "create" )
+        if [ -z $2 ] ; then 
+            wpm_usage
+        else
+            new_package $2 $3
+        fi ;; 
 esac
 

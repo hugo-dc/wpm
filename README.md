@@ -26,13 +26,10 @@ Run the following command in Gitbash:
 
 Usage
 -----
-
-    Usage: ./wpm [option] [package]
+    Usage: wpm [option] [package]
 
     Options
-        search	[package]
-        install	<package>
-        update 
-
-
-
+        search	[package]		 - Search for packages | List packages
+        install	<package>		 - Installs new package
+        create	<package> [type] - Types [default|github]
+        update				     - Update wpm (git pull to main repository)
