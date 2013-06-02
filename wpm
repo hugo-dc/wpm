@@ -218,22 +218,28 @@ function update_wpm {
 }
 
 function skel_pack {
+    btyp=$2
+    if [ -z $btyp ] ; then 
+        btyp="default"
+    fi
     pack=$BASE/packages/$1
     echo "#!/bin/bash"                                                       > $pack
     echo ""                                                                 >> $pack
-    echo "BINTYP=\"$2\""                                                    >> $pack
+    echo "BINTYP=\"$btyp\""                                                    >> $pack
     echo 'BINURL="" '                                                       >> $pack
     echo 'O_FILE="" '                                                       >> $pack
-    if [[ "$2" = "default" ]] ; then 
+    if [[ "$btyp" = "default" ]] ; then 
         echo 'MD5=""'                                                       >> $pack
     fi
     echo -e "declare -a DEPEND=(\"\")\n"                                    >> $pack
     echo "function setup {"                                                 >> $pack
-    if [[ "$2" = "github" ]] ; then 
+    if [[ "$btyp" = "github" ]] ; then 
         echo -e "\techo \"cd \$O_FILE ; \""                                 >> $pack
     fi
     echo -e "\techo \"\" # put setup command here, end it with semicolon ;" >> $pack
-    echo -e "\techo \"cd - >> stderr ; \""                                  >> $pack
+    if [[ "$btyp" = "github" ]] ; then 
+        echo -e "\techo \"cd - >> stderr ; \""                                  >> $pack
+    fi
     echo -e "}\n"                                                           >> $pack
     echo "function check_install {"                                         >> $pack
     echo -e "\t# Check if the package is installed in the system"           >> $pack
@@ -249,7 +255,7 @@ function skel_pack {
     echo -e "\t\techo \${DEPEND[@]};;"                                      >> $pack
     echo -e "\t\"o_file\" )"                                                >> $pack
     echo -e "\t\techo \$O_FILE;;"                                           >> $pack
-    if [[ "$2" = "default" ]] ; then 
+    if [[ "$btyp" = "default" ]] ; then 
         echo -e "\t\"md5\" )"                                               >> $pack
         echo -e "\t\techo \$MD5;;"                                          >> $pack    
     fi

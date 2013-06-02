@@ -7,8 +7,12 @@ MD5="a363dbcaf9f2fbee955d890351afba34"
 SETUP="$O_FILE"
 
 function check_install {
-    a=$(which gvim) 
-    echo $?
+    DEFINST="/C/Program Files (x86)/Vim/vim73/gvim.exe"
+    if [ -f "$DEFINST" ] ; then 
+        echo "0"
+    else
+        echo "1" 
+    fi
 }
 
 case "$1" in 
@@ -22,5 +26,7 @@ case "$1" in
         echo $MD5;;
     "setup_command" )
         echo $SETUP ;;
+    "check_install" )
+        check_install;;
 esac
 
