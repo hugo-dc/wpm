@@ -7,8 +7,11 @@ MD5="a"
 SETUP="cmd //c fleex-1.1.0.exe"
 
 function check_install {
-    a=$(which fleex) 
-    echo $?
+    if [ -d "/C/Program Files (x86)/Fleex" ] ; then 
+        echo "0"
+    else
+        echo "1"
+    fi 
 }
 
 case "$1" in 
@@ -22,5 +25,7 @@ case "$1" in
         echo $MD5;;
     "setup_command" )
         echo $SETUP ;;
+    "check_install" )
+        check_install ;;
 esac
 
