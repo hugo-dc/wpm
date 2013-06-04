@@ -32,7 +32,7 @@ if [[ "$result" = "0" ]] ; then
     echo "$BIN_DIR/bin/wpm\"' >> ~/.bashrc";
     echo 'export PATH=$PATH:~/bin/wpm' >> ~/.bashrc
     echo 'export PATH=$PATH:~/bin/wpm/bin' >> ~/.bashrc
-    echo "Please close GitBash"
+    echo "**** Please restart GitBash ****"
 else
     echo "[$result] Error downloading!"
 fi
