@@ -1,0 +1,39 @@
+#!/bin/bash
+
+BINTYP="default"
+BINURL="http://downloadus1.teamviewer.com/download/TeamViewer_Setup.exe" 
+O_FILE="TeamViewer_Setup.exe" 
+MD5="e819846551dcafac9c01d3171de05a89"
+declare -a DEPEND=("")
+
+function setup {
+	echo "cmd //c $O_FILE ; " # put setup command here, end it with semicolon ;
+}
+
+function check_install {
+    DEFINST="/C/Program Files (x86)/TeamViewer"   
+    if [ -d "$DEFINST" ] ; then 
+        echo "0"
+    else 
+        echo "1"
+    fi
+}
+
+case "$1" in
+	"bintype" )
+		echo $BINTYP;;
+	"binurl" )
+		echo $BINURL;;
+	"depend" )
+		echo ${DEPEND[@]};;
+	"o_file" )
+		echo $O_FILE;;
+	"md5" )
+		echo $MD5;;
+	"setup_command" )
+		setup ;;
+	"check_install" )
+		check_install;;
+esac
+
+
