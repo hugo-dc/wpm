@@ -16,22 +16,23 @@ if [ -z $(which "$GIT") ] ; then
     exit 1
 fi
 
-cd $BIN_DIR/.bin
+cd $BIN_DIR
 echo "Cloning wpm repository..."
 git clone git://github.com/hugo-dc/wpm.git
 result=$?
 
 if [[ "$result" = "0" ]] ; then 
-    touch ~/bin/wpm/wpmsource
-    mkdir ~/bin/wpm/installers
-    mkdir ~/bin/wpm/bin
-    echo 'export PATH=$PATH:~/bin/wpm/bin:/C/Windows/System32' ~/bin/wpm/wpmsource
+    touch $BIN_DIR/wpm/wpmsource
+    mkdir $BIN_DIR/.bin/wpm/installers
+    mkdir $BIN_DIR/wpm/bin
+    echo 'export PATH=$PATH:$BIN_DIR/wpm/bin:/C/Windows/System32' $BIN_DIR/wpm/wpmsource
     echo "Adding wpm to your PATH..."
     echo 
     echo -n $'  echo \'export PATH="PATH:';
-    echo "$BIN_DIR/bin/wpm\"' >> ~/.bashrc";
+    echo "$BIN_DIR/wpm\"' >> $HOME/.bashrc";
     echo 'export PATH=$PATH:~/.bin/wpm' >> ~/.bashrc
     echo 'export PATH=$PATH:~/.bin/wpm/bin' >> ~/.bashrc
+    source $HOME/.bashrc
     echo "**** Please restart GitBash ****"
 else
     echo "[$result] Error downloading!"
