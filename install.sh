@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-BIN_DIR=`~/.bin`
+BIN_DIR="$HOME/.bin"
 
 if [ ! -d "$BIN_DIR" ]; then 
     mkdir $BIN_DIR
     echo "Adding $BIN_DIR to your PATH..." 
-    source ~/.bashrc
+    echo "export PATH=$PATH:$BINDIR" >> $HOME/.bahsrc
+    source $HOME/.bashrc
 fi
 
 GIT=git 
