@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-BIN_DIR=`dirname ~/bin`
+BIN_DIR=`~/.bin`
 
 if [ ! -d "$BIN_DIR" ]; then 
     mkdir $BIN_DIR
     echo "Adding $BIN_DIR to your PATH..." 
-    
     source ~/.bashrc
 fi
 
@@ -16,7 +15,7 @@ if [ -z $(which "$GIT") ] ; then
     exit 1
 fi
 
-cd $BIN_DIR/bin
+cd $BIN_DIR/.bin
 echo "Cloning wpm repository..."
 git clone git://github.com/hugo-dc/wpm.git
 result=$?
@@ -30,8 +29,8 @@ if [[ "$result" = "0" ]] ; then
     echo 
     echo -n $'  echo \'export PATH="PATH:';
     echo "$BIN_DIR/bin/wpm\"' >> ~/.bashrc";
-    echo 'export PATH=$PATH:~/bin/wpm' >> ~/.bashrc
-    echo 'export PATH=$PATH:~/bin/wpm/bin' >> ~/.bashrc
+    echo 'export PATH=$PATH:~/.bin/wpm' >> ~/.bashrc
+    echo 'export PATH=$PATH:~/.bin/wpm/bin' >> ~/.bashrc
     echo "**** Please restart GitBash ****"
 else
     echo "[$result] Error downloading!"
