@@ -23,7 +23,7 @@ result=$?
 
 if [[ "$result" = "0" ]] ; then 
     touch $BIN_DIR/wpm/wpmsource
-    mkdir $BIN_DIR/.bin/wpm/installers
+    mkdir $BIN_DIR/wpm/installers
     mkdir $BIN_DIR/wpm/bin
     echo 'export PATH=$PATH:$BIN_DIR/wpm/bin:/C/Windows/System32' $BIN_DIR/wpm/wpmsource
     echo "Adding wpm to your PATH..."
