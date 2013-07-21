@@ -209,10 +209,10 @@ function wpm_md5 {
 }
 
 function update_wpm {
-    if [ ! -d ~/bin/wpm ] ; then 
+    if [ ! -d $BASE ] ; then 
         echo 'wpm is not installed correctly'
     else 
-        ~/bin/wpm/update &
+        $BASE/update &
         exit
     fi
 }
