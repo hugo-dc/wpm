@@ -3,7 +3,7 @@
 echo "Running update script..."
 inipath=$(pwd)
 cd ~/.bin/wpm 
-git pull & 
+git pull  
 cd "$initpath"
 cd ~/.bin/wpm/packages
 echo "Recent packages"
