@@ -9,7 +9,7 @@ declare -a depend=("msiexec")
 setup="msiexec -i"
 
 function check_install {
-    which arangodb >> stderr
+    which arangodb >> ~/.bin/wpm/log
     echo $?
 }
 

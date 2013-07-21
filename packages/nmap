@@ -11,7 +11,7 @@ function setup {
 }
 
 function check_install {
-    which nmap >> stderr 
+    which nmap >> ~/.bin/wpm/log
     echo $? # return 0 if package is installed 
 }
 

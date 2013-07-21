@@ -11,7 +11,7 @@ function setup {
 }
 
 function check_install {
-    which youtube-dl >> stderr
+    which youtube-dl >> ~/.bin/wpm/log
     echo $?
 }
 

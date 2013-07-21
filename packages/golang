@@ -12,7 +12,7 @@ function setup {
 
 function check_install {
 	# Check if the package is installed in the system
-    which go >> stderr
+    which go >> ~/.bin/wpm/log
     echo $? # return 0 if package is installed 
 }
 
