@@ -25,9 +25,9 @@ function wpm_search {
                 tab=""
             else 
                 if [ $len -gt 6 ] ; then 
-                    tab="\t"
-                else 
                     tab="\t\t"
+                else 
+                    tab="\t\t\t"
                 fi
             fi
 
