@@ -8,8 +8,8 @@ declare -a DEPEND=("msiexec")
 
 SETUP="msiexec -i $O_FILE"
 
-function check_install {
-    node --version >> stderr
+check_install(){
+    which node >> stderr ;
     echo $?
 }
 

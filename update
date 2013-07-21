@@ -2,10 +2,11 @@
 
 echo "Running update script..."
 inipath=$(pwd)
-cd ~/bin/wpm 
+cd ~/.bin/wpm 
 git pull & 
 cd "$initpath"
-cd ~/bin/wpm/packages
+cd ~/.bin/wpm/packages
 echo "Recent packages"
 ls -la | awk ' {print $6,$7,$9; }' | sed "1,4d" | head -n 10
+cd - >> stderr
 
