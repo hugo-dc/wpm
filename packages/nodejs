@@ -9,7 +9,7 @@ declare -a DEPEND=("msiexec")
 SETUP="msiexec -i $O_FILE"
 
 check_install(){
-    which node >> stderr ;
+    which node >> ~/.bin/wpm/log ;
     echo $?
 }
 

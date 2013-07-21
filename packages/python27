@@ -9,7 +9,7 @@ declare -a DEPEND=("msiexec")
 SETUP="msiexec -i $O_FILE"
 
 function check_install {
-    type python  >> stderr 
+    which python  >> ~/.bin/wpm/log 
     echo $?
 }
 

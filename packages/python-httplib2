@@ -18,7 +18,10 @@ function setup {
 
 
 function check_install {
-    python -c 'exec "try: import httplib2\nexcept:exit(4)"'
+    which python >> ~/.bin/wpm/log
+    if [[ "$?" ="0" ]]; then
+        python -c 'exec "try: import httplib2\nexcept:exit(4)"'
+    fi
     echo $?
 }
 

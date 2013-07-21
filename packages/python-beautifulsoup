@@ -18,7 +18,7 @@ function setup() {
 
 
 function check_install {
-    which python >> stderr
+    which python >> ~/.bin/wpm/log
     if [[ "$?" = "0" ]]; then
         python -c 'exec "try: from bs4 import BeautifulSoup\nexcept:exit(4)"'
     fi

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+BINTYP="default"
+BINURL="http://go.googlecode.com/files/go1.1.windows-amd64.msi"
+O_FILE="go1.1.windows-amd64.msi" 
+MD5="a"
+declare -a DEPEND=("msiexec")
+
+function setup {
+	echo "msiexec -i $O_FILE" # put setup command here, end it with semicolon ;
+}
+
+function check_install {
+	# Check if the package is installed in the system
+    which go >> stderr
+    echo $? # return 0 if package is installed 
+}
+
+case "$1" in
+	"bintype" )
+		echo $BINTYP;;
+	"binurl" )
+		echo $BINURL;;
+	"depend" )
+		echo ${DEPEND[@]};;
+	"o_file" )
+		echo $O_FILE;;
+	"md5" )
+		echo $MD5;;
+	"setup_command" )
+		setup ;;
+	"check_install" )
+		check_install;;
+esac
+
+

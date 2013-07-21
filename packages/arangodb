@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+bintyp="msi"
+binurl="https://www.arangodb.org/repositories/stable/Windows/arango64.msi"
+o_file="arango64.msi"
+md5="128f85721f3d2b67482dbfc2a4d42f2f"
+declare -a depend=("msiexec")
+
+setup="msiexec -i"
+
+function check_install {
+    which arangodb >> stderr
+    echo $?
+}
+
+case "$1" in 
+    "bintype" )
+        echo $bintyp;;
+    "binurl" )
+        echo $binurl;;
+    "o_file" )
+        echo $o_file;;
+    "md5" ) 
+        echo $md5;;
+    "depend" )
+        echo ${depend[@]};; 
+    "check_install" )
+        check_install;;
+    "setup_command" )
+        echo $setup ;;
+esac
+
