@@ -13,11 +13,12 @@ function check_install {
 }
 
 function setup() {
+    echo "echo 'Please try installing Python in C:\\Python27\\'"
     echo "msiexec -i $O_FILE"
 
     # Check default directory
     if [ -f /C/Python27/python.exe ] ; then 
-        echo "\PATH=$PATH:/C/Python27" >> $HOME/.bashrc
+        echo "PATH=\$PATH:/C/Python27" >> $HOME/.bashrc
         PATH=$PATH:/C/Python27
         export PATH
     fi
