@@ -6,11 +6,21 @@ O_FILE="python-2.7.5.msi"
 MD5="0006d6219160ce6abe711a71c835ebb0"
 declare -a DEPEND=("msiexec")
 
-SETUP="msiexec -i $O_FILE"
 
 function check_install {
     which python  >> ~/.bin/wpm/log 
     echo $?
+}
+
+function setup() {
+    echo "msiexec -i $O_FILE"
+
+    # Check default directory
+    if [ -f /C/Python27/python.exe ] ; then 
+        echo "\PATH=$PATH:/C/Python27" >> $HOME/.bashrc
+        PATH=$PATH:/C/Python27
+        export PATH
+    fi
 }
 
 case "$1" in 
@@ -27,5 +37,5 @@ case "$1" in
     "check_install" )
         check_install;;
     "setup_command" )
-        echo $SETUP ;;
+        setup ;;
 esac
