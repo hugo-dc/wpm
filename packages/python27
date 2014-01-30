@@ -9,7 +9,7 @@ declare -a DEPEND=("msiexec")
 
 function check_install {
     #which python  >> ~/.bin/wpm/log 
-    /C/Python27/python -c "print /C/Python27" >> ~/.bin/wpm/log
+    /C/Python27/python -c "print '/C/Python27'" >> ~/.bin/wpm/log
     echo $?
 }
 
