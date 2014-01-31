@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+BINTYP="default"
+BINURL="https://pypi.python.org/packages/source/w/websocket-client/websocket-client-0.12.0.tar.gz"
+O_FILE="websocket-client-0.12.0.tar.gz"
+MD5="15bf7acb9caec87144d39ffcff765966"
+
+function setup() {
+    echo "tar -xvf $O_FILE ; "
+
+    expath=${O_FILE%.*}
+    expath=${expath%.*}
+
+    echo "cd $expath ;"
+    echo "python setup.py install ;"
+    echo "cd - >> stderr ;"
+}
+
+function check_install() {
+    /C/Python27/python -c "print '/C/Python27'" >> ~/.bin/wpm/log 
+    if [[ "$?" = "0" ]] ; then 
+        python -c 'exec "try: import websocket\nexcept:exit(4) "'
+    fi
+    echo $?
+}
+
+case "$1" in 
+    "bintype" )
+        echo $BINTYP;;
+    "binurl" )
+        echo $BINURL;;
+    "o_file" )
+        echo $O_FILE;;
+    "md5" ) 
+        echo $MD5;;
+    "depend" )
+        echo "";;
+    "setup_command" )
+        setup ;; 
+    "check_install" ) 
+        check_install;;
+    "author" ) 
+        echo "@hugo_dc" ;; 
+esac
