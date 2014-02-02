@@ -1,0 +1,33 @@
+#!/bin/bash
+
+BINTYP="default"
+BINURL="http://iweb.dl.sourceforge.net/project/e-guidedog/Ekho/5.8/ekho-5.8.exe" 
+O_FILE="ekho-5.8.exe" 
+MD5="f820dc8410c6380d38b17e1b69876958"
+SETUP="$O_FILE"
+
+function check_install {
+    DEFINST="/C/Program Files (x86)/Ekho"
+    if [ -z "$DEFINST" ] ; then 
+        echo "0"
+    else
+        echo "1" 
+    fi
+}
+
+case "$1" in
+	"bintype" )
+		echo $BINTYP;;
+	"binurl" )
+		echo $BINURL;;
+	"o_file" )
+		echo $O_FILE;;
+	"md5" )
+		echo $MD5;;
+	"setup_command" )
+        echo $SETUP ;;
+	"check_install" )
+		check_install;;
+esac
+
+

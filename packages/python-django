@@ -4,6 +4,7 @@ BINTYP="default"
 BINURL="https://www.djangoproject.com/m/releases/1.6/Django-1.6.1.tar.gz"
 O_FILE="Django-1.6.1.tar.gz"
 MD5="3ea7a00ea9e7a014e8a4067dd6466a1b"
+declare -a DEPEND=("python27")
 
 function setup() {
     echo "tar -xvf $O_FILE ; "
