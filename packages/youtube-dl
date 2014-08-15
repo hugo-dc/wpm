@@ -7,7 +7,7 @@ O_FILE="youtube-dl.exe"
 #declare -a DEPEND=( "python27" )
 
 function setup {
-    echo "cp $O_FILE ~/bin/wpm/bin/$O_FILE"
+    echo "cp $O_FILE ~/.bin/wpm/bin/$O_FILE"
 }
 
 function check_install {
