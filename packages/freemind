@@ -13,8 +13,12 @@ function setup {
 
 function check_install {
 	# Check if the package is installed in the system
-    which freemind >> ~/.bin/wpm/log
-    echo $? # return 0 if package is installed 
+    DEFINST="/C/Program Files (x86)/FreeMind"
+    if [ -d "$DEFINST" ] ; then 
+        echo "0"
+    else 
+        echo "1"
+    fi
 }
 
 case "$1" in
