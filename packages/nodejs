@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 BINTYP="msi"
-BINURL="http://nodejs.org/dist/v0.10.8/node-v0.10.8-x86.msi"
-O_FILE="node-v0.10.8-x86.msi"
+BINURL="https://nodejs.org/dist/v0.12.7/x64/node-v0.12.7-x64.msi"
+O_FILE="node.msi"
 MD5="a363dbcaf9f2fbee955d890351afba34"
 declare -a DEPEND=("msiexec")
 
