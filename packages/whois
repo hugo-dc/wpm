@@ -1,0 +1,37 @@
+#!/bin/bash
+
+BINTYP="default"
+BINURL="https://download.sysinternals.com/files/WhoIs.zip" 
+O_FILE="whois.zip" 
+MD5=""
+declare -a DEPEND=("")
+
+function setup {
+	echo "unzip whois.zip" # put setup command here, end it with semicolon ;
+    echo "mv whois.exe ../bin/whois.exe"
+}
+
+function check_install {
+	# Check if the package is installed in the system
+	echo "which whois" # change this line for your search commands 
+	echo $? # return 0 if package is installed 
+}
+
+case "$1" in
+	"bintype" )
+		echo $BINTYP;;
+	"binurl" )
+		echo $BINURL;;
+	"depend" )
+		echo ${DEPEND[@]};;
+	"o_file" )
+		echo $O_FILE;;
+	"md5" )
+		echo $MD5;;
+	"setup_command" )
+		setup ;;
+	"check_install" )
+		check_install;;
+esac
+
+
