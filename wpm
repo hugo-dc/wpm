@@ -73,8 +73,8 @@ function wpm_setup {
     result=$(wpm_download $ofile "$binurl" $2)
     if [[ "$result" = "0" ]]; then 
         echo "Package downloaded!"
-        result=$(wpm_md5 $md5 "$BASE/installers/$ofile")
-        if [[ "$result" = "0" ]] ; then 
+        md5_2=$(md5sum $BASE/installers/$ofile | cut -d ' ' -f 1)
+        if [[ "$md5" = $md5_2 ]] ; then 
             origin=$(pwd)
             cd $BASE/installers/
             echo "Executing setup commands"
@@ -93,7 +93,9 @@ function wpm_setup {
                 echo -e "\n\nPackage $1 $stat!"
             fi
         else 
-            echo $result
+            echo "Error: MD5 sum does not match!"
+            echo "[Expected: $md5 - Actual: $md5_2]"
+            echo "Package cannot be installed"
         fi
     else 
         if [[ "$2" = "github" ]] ; then 
@@ -190,22 +192,6 @@ function wpm_download {
         echo -e "\n\t[$result] Error downloading $1 ($2)"
     fi
     echo $result
-}
-
-function wpm_md5 {
-    if [[ ! -z $1 ]] ; then 
-        echo "0" #
-    else
-        md5bin=$(md5sum $2)
-        declare -a md5bin2=($md5bin)
-        md5bin=${md5bin2[0]}
-        if [[ "$1" = $md5bin ]] ; then 
-            echo "0"
-        else 
-            echo "MD5 sum does not match! "
-            echo "$1 - $md5bin"
-        fi
-    fi
 }
 
 function update_wpm {

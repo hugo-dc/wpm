@@ -3,7 +3,8 @@
 BINTYP="default"
 BINURL="https://download.sysinternals.com/files/WhoIs.zip" 
 O_FILE="whois.zip" 
-MD5=""
+MD5="92c7c2928d72b89bb7df9ac67e0d3571"
+
 declare -a DEPEND=("")
 
 function setup {
@@ -13,7 +14,7 @@ function setup {
 
 function check_install {
 	# Check if the package is installed in the system
-	echo "which whois" # change this line for your search commands 
+	which whois >> ~/.bin/wpm/log # change this line for your search commands 
 	echo $? # return 0 if package is installed 
 }
 
