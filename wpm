@@ -63,14 +63,37 @@ function wpm_found {
     echo "$result"
 }
 
+function wpm_chk_dwld {
+    if [ -f $1 ] ; then 
+        echo "0"
+    else
+        echo "1"
+    fi
+}
+
 function wpm_setup {
     binurl=$($BASE/packages/$1 "binurl")
     ofile=$($BASE/packages/$1 "o_file")
     md5=$($BASE/packages/$1 "md5")
     setup=$($BASE/packages/$1 "setup_command")
 
-    echo "Downloading $ofile..."
-    result=$(wpm_download $ofile "$binurl" $2)
+    dwloaded=$(wpm_chk_dwld $BASE/installers/$ofile)
+    if [[ "$dwloaded" = "0" ]]; then
+        echo "File already downloaded..."
+        md5_2=$(md5sum $BASE/installers/$ofile | cut -d ' ' -f 1)
+        if [[ "$md5" = $md5_2 ]]; then 
+            echo "MD5 sum matched!"
+            result=0
+        else
+            echo "MD5 does not match!"
+            echo "[Expected: $md5 - Actual: $md5_2]"
+            echo "Downloading $ofile again!..."
+            result=$(wpm_download $ofile "$binurl" $2)
+        fi
+    else
+        echo "Downloading $ofile..."
+        result=$(wpm_download $ofile "$binurl" $2)
+    fi
     if [[ "$result" = "0" ]]; then 
         echo "Package downloaded!"
         md5_2=$(md5sum $BASE/installers/$ofile | cut -d ' ' -f 1)
