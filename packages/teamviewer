@@ -3,7 +3,8 @@
 BINTYP="default"
 BINURL="http://downloadus1.teamviewer.com/download/TeamViewer_Setup.exe" 
 O_FILE="TeamViewer_Setup.exe" 
-MD5="e819846551dcafac9c01d3171de05a89"
+MD5="bc8e2b03d140ecd4203c7e033d202692"
+
 declare -a DEPEND=("")
 
 function setup {
