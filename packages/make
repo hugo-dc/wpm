@@ -3,7 +3,7 @@
 BINTYP="default"
 BINURL="http://iweb.dl.sourceforge.net/project/mingw/MinGW/Extension/make/mingw32-make-3.80-3/mingw32-make-3.80.0-3.exe"
 O_FILE="mingw32-make-3.80.0-3.exe"
-MD5="8ae51379d1f3eef8360df4e674f17d6d"
+MD5="ee949562c4be26ae587a241995a23b66"
 
 function setup {
     echo "echo -e '#!/bin/bash\n/C/MinGW/bin/mingw32-make \$@' > ~/bin/wpm/bin/make"
