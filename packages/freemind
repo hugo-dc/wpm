@@ -3,7 +3,7 @@
 BINTYP="default"
 BINURL="http://iweb.dl.sourceforge.net/project/freemind/freemind/0.9.0/FreeMind-Windows-Installer-0.9.0-max.exe" 
 O_FILE="FreeMind-Installer-0.0.0-max.exe" 
-MD5="a"
+MD5="a56288c66377fb2a086b19809668e530"
 declare -a DEPEND=("")
 
 function setup {
