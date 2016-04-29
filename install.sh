@@ -5,7 +5,7 @@ BIN_DIR="$HOME/.bin"
 if [ ! -d "$BIN_DIR" ]; then 
     mkdir $BIN_DIR
     echo "Adding $BIN_DIR to your PATH..." 
-    echo "export PATH=$PATH:$BINDIR" >> $HOME/.bahsrc
+    echo "export PATH=$PATH:$BINDIR" >> $HOME/.bashrc
     source $HOME/.bashrc
 fi
 
