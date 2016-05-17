@@ -1,0 +1,37 @@
+#!/bin/bash
+
+BINTYP="default"
+BINURL="http://tukaani.org/xz/xz-5.2.1-windows.zip" 
+O_FILE="xz-5.2.1-windows.zip" 
+MD5="c96a978922635821be88d2d4cf373c14"
+declare -a DEPEND=("")
+
+function setup {
+    echo "unzip $O_FILE" 
+    echo "mv bin_x86-64/*exe ../bin/"
+}
+
+function check_install {
+    # Check if the package is installed in the system
+    which xz >> ~/.bin/wpm/log
+    echo $?
+}
+
+case "$1" in
+	"bintype" )
+		echo $BINTYP;;
+	"binurl" )
+		echo $BINURL;;
+	"depend" )
+		echo ${DEPEND[@]};;
+	"o_file" )
+		echo $O_FILE;;
+	"md5" )
+		echo $MD5;;
+	"setup_command" )
+		setup ;;
+	"check_install" )
+		check_install;;
+esac
+
+
