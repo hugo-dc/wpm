@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 BINTYP="default"
-BINURL="http://python.org/ftp/python/2.7.5/python-2.7.5.msi"
-O_FILE="python-2.7.5.msi"
-MD5="0006d6219160ce6abe711a71c835ebb0"
+BINURL="http://python.org/ftp/python/2.7.12/python-2.7.12.msi"
+O_FILE="python-2.7.12.msi"
+MD5="fe0ef5b8fd02722f32f7284324934f9d"
 declare -a DEPEND=("msiexec")
 
 
