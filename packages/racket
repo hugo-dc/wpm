@@ -11,9 +11,13 @@ function setup {
 }
 
 function check_install {
-	# Check if the package is installed in the system
-	echo "NEW" # change this line for your search commands 
-	#echo $? # return 0 if package is installed 
+    # Check if the package is installed in the system
+    DEFINST="/C/Program Files (x86)/Racket"
+    if [ -d "$DEFINST" ] ; then
+	echo "0"
+    else
+	echo "1" 
+    fi
 }
 
 case "$1" in
