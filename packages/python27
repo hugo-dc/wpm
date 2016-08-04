@@ -6,7 +6,6 @@ O_FILE="python-2.7.12.msi"
 MD5="fe0ef5b8fd02722f32f7284324934f9d"
 declare -a DEPEND=("msiexec")
 
-
 function check_install {
     #which python  >> ~/.bin/wpm/log 
     /C/Python27/python -c "print '/C/Python27'" >> ~/.bin/wpm/log

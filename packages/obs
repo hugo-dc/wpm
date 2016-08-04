@@ -1,0 +1,36 @@
+#!/bin/bash
+
+BINTYP="default"
+BINURL="https://github-cloud.s3.amazonaws.com/releases/13233158/24c400d6-4a90-11e6-92e2-3b27efda3c20.exe?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAISTNZFOVBIJMK3TQ%2F20160804%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20160804T190019Z&X-Amz-Expires=300&X-Amz-Signature=e848c4167ebe51e41549ac5af457e09b252d88a0471a44c085985383d17adef5&X-Amz-SignedHeaders=host&actor_id=0&response-content-disposition=attachment%3B%20filename%3DOBS-Studio-0.15.2-With-Browser-Installer.exe&response-content-type=application%2Foctet-stream" 
+O_FILE="OBS-Studio-Installer.exe" 
+MD5="b6a8a9e3440136ea22d37351cb52285e"
+declare -a DEPEND=("")
+
+function setup {
+	echo "cmd //c $O_FILE ; " # put setup command here, end it with semicolon ;
+}
+
+function check_install {
+	# Check if the package is installed in the system
+	echo "NEW" # change this line for your search commands 
+	#echo $? # return 0 if package is installed 
+}
+
+case "$1" in
+	"bintype" )
+		echo $BINTYP;;
+	"binurl" )
+		echo $BINURL;;
+	"depend" )
+		echo ${DEPEND[@]};;
+	"o_file" )
+		echo $O_FILE;;
+	"md5" )
+		echo $MD5;;
+	"setup_command" )
+		setup ;;
+	"check_install" )
+		check_install;;
+esac
+
+
