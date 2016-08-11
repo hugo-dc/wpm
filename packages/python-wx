@@ -1,0 +1,38 @@
+#!/bin/bash
+
+BINTYP="default"
+BINURL="http://superb-sea2.dl.sourceforge.net/project/wxpython/wxPython/3.0.2.0/wxPython3.0-win32-3.0.2.0-py27.exe"
+O_FILE="wxpython-3.0.exe" 
+MD5="c0119e46357dcfc480d50825c64a90c2"
+declare -a DEPEND=("")
+
+function setup {
+	echo "cmd //c $O_FILE" # put setup command here, end it with semicolon ;
+}
+
+function check_install {
+    which python >> ~/.bin/wpm/log
+    if [[ "$?" = "0" ]]; then
+        python -c 'exec "try: import wx\nexcept:exit(4)"'
+    fi
+    echo $?
+}
+
+case "$1" in
+	"bintype" )
+		echo $BINTYP;;
+	"binurl" )
+		echo $BINURL;;
+	"depend" )
+		echo ${DEPEND[@]};;
+	"o_file" )
+		echo $O_FILE;;
+	"md5" )
+		echo $MD5;;
+	"setup_command" )
+		setup ;;
+	"check_install" )
+		check_install;;
+esac
+
+
