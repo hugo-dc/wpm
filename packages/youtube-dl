@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 BINTYP="default"
-BINURL="http://youtube-dl.org/downloads/2013.05.23/youtube-dl.exe"
-MD5="c52e32387770395629b96d22cede833f"
+BINURL="https://github-cloud.s3.amazonaws.com/releases/1039520/11741094-9a62-11e6-800c-deabee527341.exe?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAISTNZFOVBIJMK3TQ%2F20161025%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20161025T143254Z&X-Amz-Expires=300&X-Amz-Signature=1e22b74a1e1738f724306e0f8137ff5a2cc9ea12af90c55685244c1d53fe09c6&X-Amz-SignedHeaders=host&actor_id=392723&response-content-disposition=attachment%3B%20filename%3Dyoutube-dl.exe&response-content-type=application%2Foctet-stream"
+MD5=" f2eb499dfde36e1f3f6c69c8da31f307"
 O_FILE="youtube-dl.exe"
 #declare -a DEPEND=( "python27" )
 
@@ -23,7 +23,9 @@ case "$1" in
     "depend" )
         echo ${DEPEND[@]};;
     "o_file" ) 
-        echo $O_FILE ;; 
+        echo $O_FILE ;;
+    "md5" )
+	echo $MD5 ;;
     "setup_command" )
         setup;;
     "check_install" ) 
